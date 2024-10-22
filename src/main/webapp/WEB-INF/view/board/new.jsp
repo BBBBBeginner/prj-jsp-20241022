@@ -14,7 +14,7 @@
     </div>
     <div>
         본문
-        <textarea name="context" id="" cols="30" rows="10"></textarea>
+        <textarea name="content" id="" cols="30" rows="10"></textarea>
     </div>
     <div>
         작성자
