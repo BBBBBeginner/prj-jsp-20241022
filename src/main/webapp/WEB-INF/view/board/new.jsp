@@ -18,7 +18,7 @@
     </div>
     <div>
         작성자
-        <input type="text" name="writer/">
+        <input type="text" name="writer"/>
     </div>
     <div>
         <button>저장</button>
