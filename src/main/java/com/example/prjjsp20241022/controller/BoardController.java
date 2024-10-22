@@ -59,8 +59,9 @@ public class BoardController {
     public String deleteBoard(Integer id, RedirectAttributes rttr) {
         service.remove(id);
 
-        rttr.addFlashAttribute("message", Map.of("type", "success",
-                "text", id + "번 게시물이 삭제되었습니다."));
+        rttr.addFlashAttribute("message",
+                Map.of("type", "warning",
+                        "text", id + "번 게시물이 삭제되었습니다."));
         return "redirect:/board/list";
     }
 
