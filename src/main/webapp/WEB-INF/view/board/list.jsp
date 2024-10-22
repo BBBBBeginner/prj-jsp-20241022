@@ -21,7 +21,10 @@
     <c:forEach items="${boardList}" var="board">
         <tr>
             <td>${board.id}</td>
-            <td>${board.title}</td>
+            <td>
+                <a href="/board/view?id=${board.id}"></a>
+                    ${board.title}
+            </td>
             <td>${board.writer}</td>
             <td>${board.inserted}</td>
         </tr>
