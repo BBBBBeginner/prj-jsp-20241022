@@ -5,10 +5,12 @@
     <title>Title</title>
 </head>
 <body>
+
 <c:import url="/WEB-INF/fragment/navbar.jsp"/>
+
 <h2>게시물 목록</h2>
 
-<talbe>
+<table>
     <thead>
     <tr>
         <th>번호</th>
@@ -30,8 +32,8 @@
             <td>${board.inserted}</td>
         </tr>
     </c:forEach>
-    
+
     </tbody>
-</talbe>
+</table>
 </body>
 </html>
