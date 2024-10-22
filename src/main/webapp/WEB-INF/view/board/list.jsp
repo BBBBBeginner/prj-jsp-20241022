@@ -5,6 +5,7 @@
     <title>Title</title>
 </head>
 <body>
+
 <h2>게시물 목록</h2>
 
 <talbe>

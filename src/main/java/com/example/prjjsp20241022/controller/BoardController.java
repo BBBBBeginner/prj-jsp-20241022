@@ -17,9 +17,8 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService service;
-
-
     // 게시물 CRUD
+
 
     // /board/new
     @GetMapping("new")
