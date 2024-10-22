@@ -20,6 +20,9 @@
         작성자
         <input type="text" name="writer/">
     </div>
+    <div>
+        <button>저장</button>
+    </div>
 
 </form>
 </body>
