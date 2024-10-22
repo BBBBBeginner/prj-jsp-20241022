@@ -17,7 +17,7 @@
             }
 
             .success {
-                background-color: skyblue;
+                background-color: #69c2ef;
             }
 
             .warning {
