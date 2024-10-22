@@ -47,4 +47,10 @@ public class BoardController {
 
 
     }
+
+    @PostMapping("delete")
+    public String deleteBoard(Integer id) {
+        service.remove(id);
+        return "redirect:/board/list";
+    }
 }
