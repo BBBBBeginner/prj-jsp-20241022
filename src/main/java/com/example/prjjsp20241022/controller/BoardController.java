@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,11 +30,16 @@ public class BoardController {
     }
 
     @PostMapping("new")
-    public String newBoard(Board board) {
+    public String newBoard(Board board, RedirectAttributes rttr) {
         service.add(board);
+
+        rttr.addFlashAttribute("message",
+                Map.of("type", "success",
+                        "text", "새 게시물이 등록되었습니다."));
 
         return "redirect:/board/list";
     }
+
 
     @GetMapping("list")
     public void listBoard(Model model) {
@@ -50,8 +56,11 @@ public class BoardController {
     }
 
     @PostMapping("delete")
-    public String deleteBoard(Integer id) {
+    public String deleteBoard(Integer id, RedirectAttributes rttr) {
         service.remove(id);
+
+        rttr.addFlashAttribute("message", Map.of("type", "success",
+                "text", id + "번 게시물이 삭제되었습니다."));
         return "redirect:/board/list";
     }
 
@@ -69,4 +78,5 @@ public class BoardController {
         rttr.addAttribute("id", board.getId());
         return "redirect:/board/view";
     }
+
 }
