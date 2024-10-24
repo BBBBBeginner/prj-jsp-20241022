@@ -44,6 +44,8 @@ public class BoardService {
         pageInfo.put("leftPageNumber", leftPageNumber);
         pageInfo.put("rightPageNumber", rightPageNumber);
         pageInfo.put("lastPageNumber", lastPageNumber);
+        pageInfo.put("currentPageNumber", page);
+
         map.put("pageInfo", pageInfo);
         map.put("boardList", list);
         return map;
