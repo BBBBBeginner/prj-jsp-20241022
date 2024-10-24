@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
-<div>
+
+<div class="mb-4">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container">
             <a class="navbar-brand" href="/board/list">JSP게시판</a>
@@ -28,26 +29,15 @@
         </div>
     </nav>
 </div>
-<div>
-
-    <c:if test="${not empty message}">
-        <style>
-            h5 {
-                padding: 10px;
-            }
-
-            .success {
-                background-color: #69c2ef;
-            }
-
-            .warning {
-                background-color: darkorange;
-            }
-        </style>
-        <div class="${message.type}">
-            <h5>
-                    ${message.text}
-            </h5>
+<c:if test="${not empty message}">
+    <div class="container mb-4">
+        <div class="row justify-content-center">
+            <div class="col col-md-8 col-xl-6">
+                <div class="alert alert-${message.type} alert-dismissible fade show">
+                        ${message.text}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
         </div>
-    </c:if>
-</div>
+    </div>
+</c:if>
