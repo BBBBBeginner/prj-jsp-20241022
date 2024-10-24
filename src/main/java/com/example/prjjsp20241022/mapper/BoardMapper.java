@@ -8,7 +8,6 @@ import java.util.List;
 @Mapper
 public interface BoardMapper {
 
-
     @Insert("""
             INSERT INTO board
             (title, content, writer)
@@ -17,13 +16,11 @@ public interface BoardMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(Board board);
 
-
     @Select("""
             SELECT * FROM board
             ORDER BY id DESC
             """)
     List<Board> selectAll();
-
 
     @Select("""
             SELECT *
@@ -48,7 +45,6 @@ public interface BoardMapper {
             """)
     int update(Board board);
 
-
     @Select("""
             SELECT *
             FROM board
@@ -56,4 +52,9 @@ public interface BoardMapper {
             LIMIT #{offset}, 10
             """)
     List<Board> selectAllPaging(Integer offset);
+
+    @Select("""
+            SELECT COUNT(id) FROM board
+            """)
+    Integer countAll();
 }

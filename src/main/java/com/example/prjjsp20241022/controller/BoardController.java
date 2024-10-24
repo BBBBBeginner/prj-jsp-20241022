@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -48,9 +47,10 @@ public class BoardController {
                           Model model) {
 
         // 한 페이지에 10개의 계시물
-
-        List<Board> list = service.list(page);
-        model.addAttribute("boardList", list);
+        Map<String, Object> result = service.list(page);
+        model.addAllAttributes(result);
+//        List<Board> list = service.list(page);
+//        model.addAttribute("boardList", list);
     }
 
 

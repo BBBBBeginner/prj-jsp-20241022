@@ -38,7 +38,7 @@
 
 <div>
     <%-- pagination--%>
-    <c:forEach begin="1" end="15" var="pageNumber">
+    <c:forEach begin="1" end="${lastPageNumber}" var="pageNumber">
         <a href="/board/list?page=${pageNumber}">${pageNumber}</a>
     </c:forEach>
 </div>
