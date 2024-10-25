@@ -13,36 +13,32 @@
 </head>
 <body>
 <c:import url="/WEB-INF/fragment/navbar.jsp"/>
-
+<%--div.container>div.row>div.col>h2.my-3+form--%>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12 col-md-9 col-lg-6">
-
             <h2 class="my-3">
-                암호 변경
+                로그인
             </h2>
-
             <form method="post">
-                <%--                div.mb-3*2>label.form-label+input.form-control--%>
                 <div class="mb-3">
-                    <label for="input1" class="form-label">기존 암호</label>
-                    <input id="input1" name="oldPassword" type="text" class="form-control">
+                    <label for="input1" class="form-label">아이디</label>
+                    <input id="input1" name="id" type="text" class="form-control">
                 </div>
                 <div class="mb-3">
-                    <label for="input2" class="form-label">새 암호</label>
-                    <input id="input2" name="newPassword" type="text" class="form-control">
+                    <label for="input2" class="form-label">암호</label>
+                    <input id="input2" name="password" type="text" class="form-control">
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-primary">
-                        <i class="fa-regular fa-floppy-disk"></i>
-                        저장
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        로그인
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

@@ -37,12 +37,19 @@
                             회원목록
                         </a>
                     </li>
-
+                    <li class="nav-item">
+                        <a href="/member/login" class="nav-link">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                            로그인
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 </div>
+
+
 <c:if test="${not empty message}">
     <div class="container mb-4">
         <div class="row justify-content-center">
