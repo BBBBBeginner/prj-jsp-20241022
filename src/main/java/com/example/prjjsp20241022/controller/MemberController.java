@@ -1,6 +1,7 @@
 package com.example.prjjsp20241022.controller;
 
 import com.example.prjjsp20241022.dto.Member;
+import com.example.prjjsp20241022.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,21 +19,27 @@ import java.util.Map;
 @RequestMapping("member")
 @RequiredArgsConstructor
 public class MemberController {
-    private final com.example.prjjsp20241022.service.MemberService service;
+
+    private final MemberService service;
+
 
     @GetMapping("signup")
     public void signup() {
+
     }
 
     @PostMapping("signup")
     public String signupProcess(Member member, RedirectAttributes rttr) {
+
         service.addMember(member);
+
         rttr.addFlashAttribute("message", Map.of("type", "success",
                 "text", "회원가입되었습니다."));
+
         return "redirect:/board/list";
     }
 
-    @GetMapping("list")  // @GetMapping 누락 수정
+    @GetMapping("list")
     public String list(
             @SessionAttribute(value = "loggedInMember", required = false)
             Member member,
@@ -44,7 +51,7 @@ public class MemberController {
             return "redirect:/member/login";
         } else {
             model.addAttribute("memberList", service.list());
-            return "member/list";  // 리턴 경로 수정
+            return null;
         }
     }
 
@@ -74,66 +81,110 @@ public class MemberController {
                 rttr.addFlashAttribute("message", Map.of("type", "danger",
                         "text", "패스워드가 일치하지 않습니다."));
                 rttr.addAttribute("id", id);
+
                 return "redirect:/member/view";
             }
         } else {
             rttr.addFlashAttribute("message", Map.of("type", "danger",
                     "text", "권한이 없습니다."));
+
             session.invalidate();
+            return "redirect:/member/login";
+        }
+
+
+    }
+
+    @GetMapping("edit")
+    public String edit(String id, Model model,
+                       RedirectAttributes rttr,
+                       @SessionAttribute("loggedInMember") Member member) {
+
+        if (service.hasAccess(id, member)) {
+            model.addAttribute("member", service.info(id));
+            return null;
+        } else {
+            rttr.addFlashAttribute("message", Map.of("type", "danger",
+                    "text", "권한이 없습니다."));
             return "redirect:/member/login";
         }
     }
 
-    @GetMapping("edit")
-    public void edit(String id, Model model) {
-        model.addAttribute("member", service.info(id));
-    }
-
     @PostMapping("edit")
-    public String editProcess(Member member, RedirectAttributes rttr) {
+    public String editProcess(Member member, RedirectAttributes rttr,
+                              @SessionAttribute("loggedInMember") Member loggedInMember) {
+        if (service.hasAccess(member.getId(), loggedInMember)) {
+            try {
+                service.update(member);
+                rttr.addFlashAttribute("message", Map.of("type", "success",
+                        "text", "회원정보가 수정되었습니다."));
 
-        try {
-            service.update(member);
-            rttr.addFlashAttribute("message", Map.of("type", "success",
-                    "text", "회원정보가 수정되었습니다."));  // 구문 수정
+            } catch (DuplicateKeyException e) {
+                rttr.addFlashAttribute("message", Map.of("type", "danger",
+                        "text", STR."\{member.getNickName()}은 이미 사용중인 별명입니다."));
 
-        } catch (DuplicateKeyException e) {
-            rttr.addFlashAttribute("message", Map.of("type", "danger",
-                    "text", member.getNickName() + "은 이미 사용 중입니다."));  // 메시지 수정
+                rttr.addAttribute("id", member.getId());
+                return "redirect:/member/edit";
+            }
 
             rttr.addAttribute("id", member.getId());
-            return "redirect:/member/edit";
+            return "redirect:/member/view";
+        } else {
+
+            rttr.addFlashAttribute("message", Map.of("type", "danger",
+                    "text", "권한이 없습니다."));
+            return "redirect:/member/login";
         }
-        rttr.addAttribute("id", member.getId());
-        return "redirect:/member/view";
     }
 
     @GetMapping("edit-password")
-    public String editPassword(String id, Model model) {
-        model.addAttribute("id", id);
-        return "/member/editPassword";
+    public String editPassword(String id,
+                               Model model,
+                               RedirectAttributes rttr,
+                               @SessionAttribute("loggedInMember") Member member) {
+        if (service.hasAccess(id, member)) {
+            model.addAttribute("id", id);
+
+            return "/member/editPassword";
+
+        } else {
+            rttr.addFlashAttribute("message", Map.of("type", "danger",
+                    "text", "권한이 없습니다."));
+            return "redirect:/member/login";
+        }
+
     }
 
     @PostMapping("edit-password")
     public String editPasswordProcess(String id,
                                       String oldPassword,
                                       String newPassword,
-                                      RedirectAttributes rttr) {
-        if (service.updatePassword(id, oldPassword, newPassword)) {
-            rttr.addFlashAttribute("message", Map.of("type", "success",
-                    "text", "암호가 변경되었습니다."));
-            rttr.addAttribute("id", id);
-            return "redirect:/member/view";
+                                      RedirectAttributes rttr,
+                                      @SessionAttribute("loggedInMember") Member member) {
+        if (service.hasAccess(id, member)) {
+
+            if (service.updatePassword(id, oldPassword, newPassword)) {
+                rttr.addFlashAttribute("message", Map.of("type", "success",
+                        "text", "암호가 변경되었습니다."));
+                rttr.addAttribute("id", id);
+                return "redirect:/member/view";
+            } else {
+                rttr.addFlashAttribute("message", Map.of("type", "warning",
+                        "text", "암호가 변경되지 않았습니다."));
+                rttr.addAttribute("id", id);
+                return "redirect:/member/edit-password";
+            }
         } else {
-            rttr.addFlashAttribute("message", Map.of("type", "warning",
-                    "text", "암호가 변경되지 않았습니다."));
-            rttr.addAttribute("id", id);
-            return "redirect:/member/edit-password";
+            rttr.addFlashAttribute("message", Map.of("type", "danger",
+                    "text", "권한이 없습니다."));
+            return "redirect:/member/login";
         }
+
     }
 
     @GetMapping("login")
     public void login() {
+
     }
 
     @PostMapping("login")
@@ -141,23 +192,31 @@ public class MemberController {
                                RedirectAttributes rttr,
                                HttpSession session) {
         Member member = service.get(id, password);
+
         if (member == null) {
-            rttr.addFlashAttribute("message", Map.of("type", "warning",
-                    "text", "일치하는 아이디나 패스워드가 없습니다."));
+            // 로그인 실패
+            rttr.addFlashAttribute("message", Map.of("type", "warning"
+                    , "text", "일치하는 아이디나 패스워드가 없습니다."));
             return "redirect:/member/login";
         } else {
-            rttr.addFlashAttribute("message", Map.of("type", "success",
-                    "text", "로그인 되었습니다."));
+            // 로그인 성공
+            rttr.addFlashAttribute("message", Map.of("type", "success"
+                    , "text", "로그인 되었습니다."));
             session.setAttribute("loggedInMember", member);
             return "redirect:/board/list";
         }
+
     }
 
     @RequestMapping("logout")
     public String logout(HttpSession session, RedirectAttributes rttr) {
         session.invalidate();
+
         rttr.addFlashAttribute("message", Map.of("type", "success",
                 "text", "로그아웃 되었습니다."));
+
         return "redirect:/member/login";
     }
+
+
 }
