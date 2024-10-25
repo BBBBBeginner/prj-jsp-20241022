@@ -70,7 +70,18 @@ public class BoardService {
         mapper.deleteById(id);
     }
 
+
+    public void remove(Integer id, Member member) {
+        Board board = mapper.selectById(id);
+        if (board.getWriter().equals(member.getId())) {
+            mapper.deleteById(id);
+        } else {
+            throw new RuntimeException("삭제 권환이 없습니다.");
+        }
+    }
+
     public void update(Board board) {
         mapper.update(board);
     }
+
 }
