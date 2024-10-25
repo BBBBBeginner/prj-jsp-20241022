@@ -2,6 +2,7 @@ package com.example.prjjsp20241022.controller;
 
 import com.example.prjjsp20241022.dto.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,23 +66,23 @@ public class MemberController {
 
     @PostMapping("edit")
     public String editProcess(Member member, RedirectAttributes rttr) {
-        service.update(member);
-//        try {
-//            service.update(member);
-//            rttr.addFlashAttribute("message" + Map.of("type", "sucess",
-//                    "text", "회원정보가 수정되었습니다."));
 
-//        } catch (DuplicateKeyException e) {
-//            rttr.addFlashAttribute("message" + Map.of("type", "sucess",
-//                    "text", STR."\{member.getNickName()}은 이미 사용중"));
-//
-//            rttr.addAttribute("id", member.getId());
-//            return "redirect:/member/edit";
-//        }
-//        rttr.addAttribute("id", member.getId());
-//        return "redirect:/member/view";
+        try {
+            service.update(member);
+            rttr.addFlashAttribute("message" + Map.of("type", "sucess",
+                    "text", "회원정보가 수정되었습니다."));
+
+        } catch (DuplicateKeyException e) {
+            rttr.addFlashAttribute("message" + Map.of("type", "sucess",
+                    "text", STR."\{member.getNickName()}은 이미 사용중"));
+
+            rttr.addAttribute("id", member.getId());
+            return "redirect:/member/edit";
+        }
+        rttr.addAttribute("id", member.getId());
+        return "redirect:/member/view";
 //    }
-        return null;
+
     }
 }
 
