@@ -20,7 +20,6 @@ import java.util.Map;
 public class MemberController {
     private final com.example.prjjsp20241022.service.MemberService service;
 
-
     @GetMapping("signup")
     public void signup() {
     }
@@ -30,10 +29,10 @@ public class MemberController {
         service.addMember(member);
         rttr.addFlashAttribute("message", Map.of("type", "success",
                 "text", "회원가입되었습니다."));
-
         return "redirect:/board/list";
     }
 
+    @GetMapping("list")  // @GetMapping 누락 수정
     public String list(
             @SessionAttribute(value = "loggedInMember", required = false)
             Member member,
@@ -45,7 +44,7 @@ public class MemberController {
             return "redirect:/member/login";
         } else {
             model.addAttribute("memberList", service.list());
-            return null;
+            return "member/list";  // 리턴 경로 수정
         }
     }
 
@@ -58,12 +57,10 @@ public class MemberController {
     @PostMapping("delete")
     public String delete(String id, String password, RedirectAttributes rttr) {
         if (service.remove(id, password)) {
-            // 탈퇴 성공
             rttr.addFlashAttribute("message", Map.of("type", "dark",
                     "text", "회원 탈퇴하였습니다."));
             return "redirect:/member/signup";
         } else {
-            // 탈퇴 실패
             rttr.addFlashAttribute("message", Map.of("type", "danger",
                     "text", "패스워드가 일치하지 않습니다."));
             rttr.addAttribute("id", id);
@@ -81,12 +78,12 @@ public class MemberController {
 
         try {
             service.update(member);
-            rttr.addFlashAttribute("message" + Map.of("type", "sucess",
-                    "text", "회원정보가 수정되었습니다."));
+            rttr.addFlashAttribute("message", Map.of("type", "success",
+                    "text", "회원정보가 수정되었습니다."));  // 구문 수정
 
         } catch (DuplicateKeyException e) {
-            rttr.addFlashAttribute("message" + Map.of("type", "sucess",
-                    "text", STR."\{member.getNickName()}은 이미 사용중"));
+            rttr.addFlashAttribute("message", Map.of("type", "danger",
+                    "text", member.getNickName() + "은 이미 사용 중입니다."));  // 메시지 수정
 
             rttr.addAttribute("id", member.getId());
             return "redirect:/member/edit";
@@ -129,15 +126,12 @@ public class MemberController {
                                HttpSession session) {
         Member member = service.get(id, password);
         if (member == null) {
-            // 로그인 실패
-            rttr.addFlashAttribute("message", Map.of("type", "warning"
-                    , "text", "일치하는 아이디나 패스워드가 없습니다."));
+            rttr.addFlashAttribute("message", Map.of("type", "warning",
+                    "text", "일치하는 아이디나 패스워드가 없습니다."));
             return "redirect:/member/login";
         } else {
-            // 로그인 성공
-            rttr.addFlashAttribute("message", Map.of("type", "success"
-                    , "text", "로그인 되었습니다."));
-
+            rttr.addFlashAttribute("message", Map.of("type", "success",
+                    "text", "로그인 되었습니다."));
             session.setAttribute("loggedInMember", member);
             return "redirect:/board/list";
         }
@@ -146,13 +140,8 @@ public class MemberController {
     @RequestMapping("logout")
     public String logout(HttpSession session, RedirectAttributes rttr) {
         session.invalidate();
-
         rttr.addFlashAttribute("message", Map.of("type", "success",
                 "text", "로그아웃 되었습니다."));
-
         return "redirect:/member/login";
     }
 }
-
-
-
