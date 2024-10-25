@@ -44,4 +44,7 @@ public class MemberService {
         return mapper.selectByIdAndPassword(id, password);
     }
 
+    public boolean hasAccess(String id, Member member) {
+        return id.equals(member.getId());
+    }
 }
