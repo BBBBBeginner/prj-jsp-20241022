@@ -14,7 +14,6 @@
 <body>
 <c:import url="/WEB-INF/fragment/navbar.jsp"/>
 
-div class="container">
 <div class="row justify-content-center">
     <div class="col-12 col-md-9 col-lg-6">
         <h2 class="my-3">${board.id}번 게시물</h2>
