@@ -81,7 +81,6 @@ public class MemberController {
         }
         rttr.addAttribute("id", member.getId());
         return "redirect:/member/view";
-//    }
 
     }
 }
