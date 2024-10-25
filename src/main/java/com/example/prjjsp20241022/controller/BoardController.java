@@ -17,10 +17,11 @@ import java.util.Map;
 public class BoardController {
 
     private final BoardService service;
+
     // 게시물 CRUD
 
-
-    // /board/new
+    // 게시물 작성 페이지
+    @GetMapping("new")  // GetMapping 추가
     public String newBoard(@SessionAttribute(value = "loggedInMember", required = false) Member member, RedirectAttributes rttr) {
         if (member == null) {
             // 로그인 안한 상태
@@ -29,71 +30,65 @@ public class BoardController {
             return "redirect:/member/login";
         } else {
             // 로그인 한 상태
-            // /WEB-INF/view/board/new.jsp
-            return "board/new";
+            return "board/new"; // /WEB-INF/view/board/new.jsp로 이동
         }
     }
-    // /WEB-INF/view/board/new.jsp
-
 
     @PostMapping("new")
     public String newBoard(Board board,
                            RedirectAttributes rttr,
                            @SessionAttribute("loggedInMember") Member member) {
         service.add(board, member);
-
-        rttr.addFlashAttribute("message",
-                Map.of("type", "success",
-                        "text", "새 게시물이 등록되었습니다."));
-
+        rttr.addFlashAttribute("message", Map.of("type", "success",
+                "text", "새 게시물이 등록되었습니다."));
         return "redirect:/board/list";
     }
 
-    // /board/list
-    // /board/list?page=1
+    // 게시물 목록 페이지
     @GetMapping("list")
     public void listBoard(@RequestParam(name = "page", defaultValue = "1") Integer page,
                           Model model) {
-
-        // 한 페이지에 10개의 계시물
         Map<String, Object> result = service.list(page);
         model.addAllAttributes(result);
-//        List<Board> list = service.list(page);
-//        model.addAttribute("boardList", list);
     }
 
-
+    // 게시물 상세보기
     @GetMapping("view")
     public void viewBoard(Integer id, Model model) {
         Board board = service.get(id);
         model.addAttribute("board", board);
-
-
     }
 
+    // 게시물 삭제
     @PostMapping("delete")
-    public String deleteBoard(Integer id, RedirectAttributes rttr) {
-        service.remove(id);
-
-        rttr.addFlashAttribute("message",
-                Map.of("type", "warning",
-                        "text", id + "번 게시물이 삭제되었습니다."));
-        return "redirect:/board/list";
+    public String deleteBoard(Integer id,
+                              RedirectAttributes rttr,
+                              @SessionAttribute("loggedInMember") Member member) {
+        try {
+            service.remove(id, member);
+            rttr.addFlashAttribute("message", Map.of("type", "warning",
+                    "text", id + "번 게시물이 삭제되었습니다."));
+            return "redirect:/board/list";
+        } catch (RuntimeException e) {
+            rttr.addFlashAttribute("message", Map.of("type", "danger",
+                    "text", id + "번 게시물 삭제중 문제가 발생했습니다."));
+            rttr.addAttribute("id", id);
+            return "redirect:/board/view";
+        }
     }
 
+    // 게시물 수정 페이지
     @GetMapping("edit")
     public void editBoard(Integer id, Model model) {
         Board board = service.get(id);
         model.addAttribute("board", board);
     }
 
+    // 게시물 수정 처리
     @PostMapping("edit")
     public String editBoard(Board board, RedirectAttributes rttr) {
-
         service.update(board);
-
         rttr.addAttribute("id", board.getId());
         return "redirect:/board/view";
     }
-
 }
