@@ -25,13 +25,14 @@ public interface BoardMapper {
 
     @Select("""
             SELECT b.id,
-                   b.title,
-                   b.content,
-                   b.inserted,
-                   m.nick_name writerNickName
-            FROM board b JOIN member m
-                ON b.writer = m.id
-            WHERE id = #{id}
+                              b.title,
+                              b.content,
+                              b.inserted,
+                              b.writer,
+                              m.nick_name writerNickName
+                       FROM board b JOIN member m
+                               ON b.writer = m.id
+                       WHERE b.id = #{id}
             """)
     Board selectById(Integer id);
 

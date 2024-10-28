@@ -18,8 +18,3 @@ INSERT INTO board
     (title, content, writer)
 SELECT title, content, writer
 FROM board;
-
-# 계시물의 Writer 값을  member에 있는 값으로 update
-UPDATE board
-SET writer = (SELECT id FROM member LIMIT 1)
-WHERE id > 0;
