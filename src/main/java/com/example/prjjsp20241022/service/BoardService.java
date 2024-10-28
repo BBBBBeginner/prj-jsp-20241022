@@ -17,6 +17,7 @@ import java.util.Map;
 public class BoardService {
 
     private final BoardMapper mapper;
+    private final MemberMapper memberMapper;
 
     public void add(Board board, Member member) {
         mapper.insert(board, member);
@@ -62,7 +63,8 @@ public class BoardService {
     }
 
     public Board get(Integer id) {
-        return mapper.selectById(id);
+        Board board = mapper.selectById(id);
+        return board;
     }
 
     public void remove(Integer id) {
