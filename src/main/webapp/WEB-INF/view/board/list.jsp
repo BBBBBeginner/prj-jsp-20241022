@@ -63,14 +63,14 @@
     <form class="row justify-content-center">
         <div class="col-2">
             <select name="searchTarget" id="select1" class="form-select">
-                <option value="all">전체</option>
-                <option value="title">제목</option>
-                <option value="content">본문</option>
-                <option value="writer">작성자</option>
+                <option value="all" selected>전체</option>
+                <option value="title" selected ${param.searchTarget == 'title' ? 'selected' : ''}>제목</option>
+                <option value="content" selected ${param.searchTarget == 'content' ? 'selected' : ''}>본문</option>
+                <option value="writer" selected ${param.searchTarget == 'writer' ? 'selected' : ''}>작성자</option>
             </select>
         </div>
         <div class="col-4 ">
-            <input type="text" class="form-control" name="keyword">
+            <input type="text" class="form-control" name="keyword" value="${param.keyword}">
         </div>
         <div class="col-1 ">
             <button class="btn btn-outline-primary">
