@@ -33,7 +33,7 @@ public class BoardService {
         // Controller에게 넘겨 줄 정보들을 담을 map
         Map<String, Object> map = new HashMap<>();
         // 페이지 관련 정보들
-        Integer countAll = mapper.countAll();
+        Integer countAll = mapper.countAll(searchTarget, keyword);
         Integer lastPageNumber = (countAll - 1) / 10 + 1; // 마지막 페이지 번호
         Integer rightPageNumber = ((page - 1) / 10 + 1) * 10; // 현재페이지 기준 오른쪽 끝 페이지 번호
         Integer leftPageNumber = rightPageNumber - 9;// 현재페이지 기준 왼쪽 끝 페이지 번호
