@@ -24,15 +24,12 @@ public interface BoardMapper {
     List<Board> selectAll();
 
     @Select("""
-            SELECT b.id,
-                              b.title,
-                              b.content,
-                              b.inserted,
-                              b.writer,
-                              m.nick_name writerNickName
-                       FROM board b JOIN member m
-                               ON b.writer = m.id
-                       WHERE b.id = #{id}
+              SELECT b.id,
+                     b.title,
+                     b.inserted,
+                     m.nick_name writerNickName
+               FROM board b JOIN member m
+                     ON b.writer = m.id
             """)
     Board selectById(Integer id);
 
@@ -68,7 +65,7 @@ public interface BoardMapper {
                          OR content LIKE CONCAT('%', #{keyword}, '%')
                     </if>
                     <if test="searchTarget == 'all' or searchTarget == 'writer'">
-                         OR m.nick_name LIKE CONCAT('%', #{keyword}, '%')
+                          OR m.nick_name LIKE CONCAT('%', #{keyword}, '%')
                     </if>
                </trim>
                  ORDER BY b.id DESC
@@ -79,9 +76,9 @@ public interface BoardMapper {
 
     @Select("""
                              <script>
-                                  SELECT COUNT(b.id)\s
-                                                 FROM board b JOIN member m
-                                                     ON b.writer = m.id
+                                     SELECT COUNT(b.id)
+                                     FROM board b JOIN member m
+                                        ON b.writer = m.id
                                  <trim prefix="WHERE" prefixOverrides="OR">
                                      <if test="searchTarget == 'all' or searchTarget == 'title'">
                                          title LIKE CONCAT('%', #{keyword}, '%')
@@ -96,6 +93,12 @@ public interface BoardMapper {
                              </script>
             """)
     Integer countAll(String searchTarget, String keyword);
+
+    @Delete("""
+            DELETE FROM board
+            WHERE writer = #{memberId}
+            """)
+    int deleteByMemberId(String memberId);
 
 
 }
