@@ -55,6 +55,32 @@
         </div>
     </div>
 </div>
+
+
+<%--검색 form--%>
+<%--div.container>div.row>div.col-2+div.col-4+div.col-1--%>
+<div class="container">
+    <form class="row justify-content-center">
+        <div class="col-2">
+            <select name="searchTarget" id="select1" class="form-select">
+                <option value="all">전체</option>
+                <option value="title">제목</option>
+                <option value="content">본문</option>
+                <option value="writer">작성자</option>
+            </select>
+        </div>
+        <div class="col-4 ">
+            <input type="text" class="form-control" name="keyword">
+        </div>
+        <div class="col-1 ">
+            <button class="btn btn-outline-primary">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+
 <%-- bootstrap pagination --%>
 <nav class="mt-4">
     <ul class="pagination justify-content-center">
