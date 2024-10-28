@@ -59,9 +59,9 @@
 
 <%--검색 form--%>
 <%--div.container>div.row>div.col-2+div.col-4+div.col-1--%>
-<div class="container">
-    <form class="row justify-content-center">
-        <div class="col-2">
+<div class="container my-3">
+    <form class="row justify-content-center g-1">
+        <div class="col-auto">
             <select name="searchTarget" id="select1" class="form-select">
                 <option value="all" selected>전체</option>
                 <option value="title" selected ${param.searchTarget == 'title' ? 'selected' : ''}>제목</option>
@@ -69,10 +69,10 @@
                 <option value="writer" selected ${param.searchTarget == 'writer' ? 'selected' : ''}>작성자</option>
             </select>
         </div>
-        <div class="col-4 ">
+        <div class="col-6 col-md-4 col-lg-3">
             <input type="text" class="form-control" name="keyword" value="${param.keyword}">
         </div>
-        <div class="col-1 ">
+        <div class="col-auto">
             <button class="btn btn-outline-primary">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
@@ -85,9 +85,13 @@
 <nav class="mt-4">
     <ul class="pagination justify-content-center">
         <c:if test="${pageInfo.hasPrevPage}">
+            <c:url value="/board/list" var="pageLink">
+                <c:param name="page" value="${pageInfo.prevPageNumber}"></c:param>
+                <c:param name="searchTarget" value="${param.searchTarget}"/>
+                <c:param name="keyword" value="${param.keyword}"/>
+            </c:url>
             <li class="page-item">
-                <a href="/board/list?page=${pageInfo.prevPageNumber}" class="page-link">
-                    &laquo;
+                <a href="${pageLink}" class="page-link">
                 </a>
             </li>
         </c:if>
@@ -104,9 +108,13 @@
                class="page-link">${pageNumber}</a>
             </c:forEach>
             <c:if test="${pageInfo.hasNextPage}">
+            <c:url value="/board/list" var="pageLink">
+                <c:param name="page" value="${pageInfo.nextPageNumber}"></c:param>
+                <c:param name="searchTarget" value="${param.searchTarget}"/>
+                <c:param name="keyword" value="${param.keyword}"/>
+            </c:url>
         <li class="page-item">
-            <a href="/board/list?page=${pageInfo.nextPageNumber}" class="page-link">
-                &raquo;
+            <a href="${pageLink}" class="page-link">
             </a>
         </li>
         </c:if>
