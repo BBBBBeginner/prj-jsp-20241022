@@ -24,16 +24,17 @@ public class BoardService {
         mapper.insert(board, member);
     }
 
-
-    // 한 페이지에 10개
     public Map<String, Object> list(Integer page, String searchTarget, String keyword) {
+        // 한 페이지에 10개
 
         Integer offset = (page - 1) * 10;
 
-        // List<Board> list = mapper.selectAll();
+//        List<Board> list = mapper.selectAll();
         List<Board> list = mapper.selectAllPaging(offset, searchTarget, keyword);
+
         // Controller에게 넘겨 줄 정보들을 담을 map
         Map<String, Object> map = new HashMap<>();
+
         // 페이지 관련 정보들
         Integer countAll = mapper.countAll(searchTarget, keyword);
         Integer lastPageNumber = (countAll - 1) / 10 + 1; // 마지막 페이지 번호
@@ -41,6 +42,7 @@ public class BoardService {
         Integer leftPageNumber = rightPageNumber - 9;// 현재페이지 기준 왼쪽 끝 페이지 번호
         Integer nextPageNumber = rightPageNumber + 1; // 다음 버튼 클릭시 이동하는 페이지
         Integer prevPageNumber = leftPageNumber - 1; // 이전 버튼 클릭시 이동하는 페이지
+
         Boolean hasNextPage = nextPageNumber < lastPageNumber; // 다음 버튼 유무
         Boolean hasPrevPage = prevPageNumber > 0; // 이전 버튼 유무
 
@@ -60,6 +62,7 @@ public class BoardService {
 
         map.put("pageInfo", pageInfo);
         map.put("boardList", list);
+
         return map;
     }
 
@@ -68,19 +71,14 @@ public class BoardService {
         return board;
     }
 
-    public void remove(Integer id) {
-
-        mapper.deleteById(id);
-    }
-
-
     public void remove(Integer id, Member member) {
         Board board = mapper.selectById(id);
         if (board.getWriter().equals(member.getId())) {
             mapper.deleteById(id);
         } else {
-            throw new RuntimeException("삭제 권환이 없습니다.");
+            throw new RuntimeException("삭제 권한이 없습니다.");
         }
+
     }
 
     public void update(Board board, Member member) {

@@ -19,6 +19,7 @@
         <div class="col-12 col-md-9 col-lg-6">
 
             <h2 class="my-3">${board.id}번 게시물 수정</h2>
+
             <form method="post" id="updateForm1">
                 <div class="mb-3">
                     <label for="inputTitle1" class="form-label">
@@ -33,12 +34,7 @@
                     <textarea id="textareaContent1" class="form-control" name="content"
                               rows="10">${board.content}</textarea>
                 </div>
-                <div class="mb-3">
-                    <label for="inputWriter1" class="form-label">
-                        작성자
-                    </label>
-                    <input id="inputWriter1" class="form-control" type="text" name="writer" value="${board.writer}">
-                </div>
+
                 <div class="mb-3">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#updateConfirmModal1">
@@ -47,6 +43,7 @@
                     </button>
                 </div>
             </form>
+
         </div>
     </div>
 </div>
@@ -75,7 +72,6 @@
         </div>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

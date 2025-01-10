@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <%-- 로그인 여부 --%>
 <c:set value="${not empty sessionScope.loggedInMember}" var="loggedIn"/>
@@ -48,14 +48,16 @@
                             </a>
                         </li>
                     </c:if>
+
                     <c:if test="${not loggedIn}">
                         <li class="nav-item">
                             <a href="/member/login" class="nav-link">
                                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
-
+                                로그인
                             </a>
                         </li>
                     </c:if>
+
                     <c:if test="${loggedIn}">
                         <li class="nav-item">
                             <a href="/member/logout" class="nav-link">
@@ -64,6 +66,7 @@
                             </a>
                         </li>
                     </c:if>
+
                     <c:if test="${loggedIn}">
                         <li class="nav-item">
                             <a href="/member/view?id=${sessionScope.loggedInMember.id}" class="nav-link">
@@ -72,7 +75,10 @@
                             </a>
                         </li>
                     </c:if>
+
+
                 </ul>
+
             </div>
         </div>
     </nav>

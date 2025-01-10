@@ -9,10 +9,11 @@ import java.util.List;
 @Mapper
 public interface BoardMapper {
 
+
     @Insert("""
             INSERT INTO board
             (title, content, writer)
-                       VALUES (#{board.title}, #{board.content}, #{member.id})
+            VALUES (#{board.title}, #{board.content}, #{member.id})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "board.id")
     int insert(Board board, Member member);
@@ -24,12 +25,15 @@ public interface BoardMapper {
     List<Board> selectAll();
 
     @Select("""
-              SELECT b.id,
-                     b.title,
-                     b.inserted,
-                     m.nick_name writerNickName
-               FROM board b JOIN member m
-                     ON b.writer = m.id
+            SELECT b.id,
+                   b.title,
+                   b.content,
+                   b.inserted,
+                   b.writer,
+                   m.nick_name writerNickName
+            FROM board b JOIN member m
+                    ON b.writer = m.id
+            WHERE b.id = #{id}
             """)
     Board selectById(Integer id);
 
@@ -42,55 +46,54 @@ public interface BoardMapper {
     @Update("""
             UPDATE board
             SET title=#{title},
-                content=#{content},
-                writer=#{writer}
-            WHERE
+                content=#{content}
+            WHERE   
                 id = #{id}
             """)
     int update(Board board);
 
     @Select("""
             <script>
-                 SELECT b.id,
-                        b.title,
-                        b.inserted,
-                        m.nick_name writerNickName
-                 FROM board b JOIN member m
-                     ON b.writer = m.id
+                SELECT b.id,
+                       b.title,
+                       b.inserted,
+                       m.nick_name writerNickName
+                FROM board b JOIN member m
+                    ON b.writer = m.id
                 <trim prefix="WHERE" prefixOverrides="OR">
                     <if test="searchTarget == 'all' or searchTarget == 'title'">
-                         title LIKE CONCAT('%', #{keyword}, '%')
+                        title LIKE CONCAT('%', #{keyword}, '%')
                     </if>
                     <if test="searchTarget == 'all' or searchTarget == 'content'">
-                         OR content LIKE CONCAT('%', #{keyword}, '%')
+                        OR content LIKE CONCAT('%', #{keyword}, '%')
                     </if>
                     <if test="searchTarget == 'all' or searchTarget == 'writer'">
-                          OR m.nick_name LIKE CONCAT('%', #{keyword}, '%')
+                        OR m.nick_name LIKE CONCAT('%', #{keyword}, '%')
                     </if>
-               </trim>
-                 ORDER BY b.id DESC
+                </trim>
+                ORDER BY b.id DESC
                 LIMIT #{offset}, 10
-               </script>
+            </script>
             """)
     List<Board> selectAllPaging(Integer offset, String searchTarget, String keyword);
 
     @Select("""
-                             <script>
-                                     SELECT COUNT(b.id)
-                                     FROM board b JOIN member m
-                                        ON b.writer = m.id
-                                 <trim prefix="WHERE" prefixOverrides="OR">
-                                     <if test="searchTarget == 'all' or searchTarget == 'title'">
-                                         title LIKE CONCAT('%', #{keyword}, '%')
-                                     </if>
-                                     <if test="searchTarget == 'all' or searchTarget == 'content'">
-                                         OR content LIKE CONCAT('%', #{keyword}, '%')
-                                     </if>
-                                     <if test="searchTarget == 'all' or searchTarget == 'writer'">
-                                         OR m.nick_name LIKE CONCAT('%', #{keyword}, '%')
-                                     </if>
-                                 </trim>
-                             </script>
+            <script>
+                SELECT COUNT(b.id) 
+                FROM board b JOIN member m
+                    ON b.writer = m.id
+                <trim prefix="WHERE" prefixOverrides="OR">
+                    <if test="searchTarget == 'all' or searchTarget == 'title'">
+                        title LIKE CONCAT('%', #{keyword}, '%')
+                    </if>
+                    <if test="searchTarget == 'all' or searchTarget == 'content'">
+                        OR content LIKE CONCAT('%', #{keyword}, '%')
+                    </if>
+                    <if test="searchTarget == 'all' or searchTarget == 'writer'">
+                        OR m.nick_name LIKE CONCAT('%', #{keyword}, '%')
+                    </if>
+                </trim>
+            </script>
             """)
     Integer countAll(String searchTarget, String keyword);
 
@@ -99,6 +102,4 @@ public interface BoardMapper {
             WHERE writer = #{memberId}
             """)
     int deleteByMemberId(String memberId);
-
-
 }

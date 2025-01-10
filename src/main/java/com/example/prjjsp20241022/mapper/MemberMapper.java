@@ -7,6 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface MemberMapper {
+
     @Insert("""
             INSERT INTO member
             (id, password, nick_name, description)
@@ -65,4 +66,3 @@ public interface MemberMapper {
             """)
     List<String> selectAuthById(String id);
 }
-

@@ -12,5 +12,5 @@ public class Board {
     private String writer;
     private LocalDateTime inserted;
 
-    private String writerNickname;
+    private String writerNickName;
 }

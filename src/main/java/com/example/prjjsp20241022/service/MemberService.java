@@ -13,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class MemberService {
+
     private final MemberMapper mapper;
     private final BoardMapper boardMapper;
 
